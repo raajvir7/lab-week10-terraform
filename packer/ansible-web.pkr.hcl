@@ -11,10 +11,16 @@ packer {
   }
 }
 
+variable "ssh_username" {
+  type    = string
+  default = "ubuntu"
+}
+
 source "amazon-ebs" "ubuntu" {
   ami_name      = "packer-ansible-nginx"
   instance_type = "t2.micro"
   region        = "us-west-2"
+
   source_ami_filter {
     filters = {
       name                = "ubuntu/images/*ubuntu-noble-24.04-amd64-server-*"
@@ -24,14 +30,13 @@ source "amazon-ebs" "ubuntu" {
     most_recent = true
     owners      = ["099720109477"]
   }
-  ssh_username = "ubuntu"
+
+  ssh_username = var.ssh_username
 }
 
 build {
-  name = "packer-ansible-nginx"
-  sources = [
-    "source.amazon-ebs.ubuntu"
-  ]
+  name    = "packer-ansible-nginx"
+  sources = ["source.amazon-ebs.ubuntu"]
 
   provisioner "ansible" {
     ansible_env_vars = ["ANSIBLE_HOST_KEY_CHECKING=False"]

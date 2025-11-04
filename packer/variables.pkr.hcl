@@ -1,4 +1,1 @@
-variable "ssh_username" {
-  type    = string
-  default = "ubuntu"
-}
+ssh-username = "ubuntu"
